@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX — Kenya CBC Exam Intelligence</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--bg2:#111111;--bg3:#1a1a1a;--bg4:#222222;
+  --border:#2a2a2a;--border2:#333333;
+  --text:#f0ede8;--text2:#a8a49e;--text3:#6b6760;
+  --teal:#1D9E75;--teal-light:#E1F5EE;--teal-dark:#085041;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--amber-dark:#633806;
+  --blue:#378ADD;--blue-light:#E6F1FB;--blue-dark:#0C447C;
+  --coral:#D85A30;--coral-light:#FAECE7;--coral-dark:#4A1B0C;
+  --purple:#7F77DD;--purple-light:#EEEDFE;--purple-dark:#26215C;
+  --radius:10px;--radius-sm:6px;
+  --font:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.6}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);z-index:100}
+.nav-logo{font-size:20px;font-weight:600;letter-spacing:-.02em}
+.nav-logo span{color:var(--teal)}
+.nav-badge{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(29,158,117,0.15);color:var(--teal);border:0.5px solid rgba(29,158,117,0.3)}
+
+/* HERO */
+.hero{padding:3rem 1.5rem 2rem;max-width:760px;margin:0 auto;text-align:center}
+.hero-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem}
+.hero-title{font-size:clamp(28px,5vw,42px);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin-bottom:1rem}
+.hero-title span{color:var(--teal)}
+.hero-sub{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto 2rem;line-height:1.7}
+
+/* FILTER CARD */
+.filter-wrap{max-width:760px;margin:0 auto;padding:0 1.5rem 1.5rem}
+.filter-card{background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem}
+.filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1rem}
+.filter-group label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:6px}
+.filter-group select{width:100%;background:var(--bg3);border:0.5px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:var(--radius-sm);font-size:13px;font-family:var(--font);cursor:pointer}
+.filter-group select:focus{outline:none;border-color:var(--teal)}
+.year-row{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.year-row label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);white-space:nowrap}
+.year-row input[type=range]{flex:1;accent-color:var(--teal)}
+.year-row span{font-size:13px;font-weight:500;min-width:130px;color:var(--text2)}
+.run-btn{width:100%;padding:12px;background:var(--teal);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;font-family:var(--font);cursor:pointer;letter-spacing:.01em;transition:opacity .15s}
+.run-btn:hover{opacity:.9}
+.run-btn:active{opacity:.8}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:1.25rem}
+.metric{background:var(--bg3);border-radius:var(--radius-sm);padding:.875rem 1rem}
+.metric-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.metric-val{font-size:22px;font-weight:600}
+
+/* TABS */
+.tab-row{display:flex;gap:4px;margin-bottom:1rem;border-bottom:0.5px solid var(--border)}
+.tab{padding:8px 16px;font-size:13px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-family:var(--font);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+.tab:hover:not(.active){color:var(--text2)}
+
+/* TOPIC BARS */
+.topic-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem}
+.topic-row{display:flex;align-items:center;gap:12px}
+.topic-name{font-size:13px;min-width:170px;display:flex;align-items:center;gap:6px}
+.badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+.badge-high{background:rgba(29,158,117,.2);color:var(--teal)}
+.badge-med{background:rgba(239,159,39,.2);color:var(--amber)}
+.badge-low{background:rgba(107,103,96,.2);color:var(--text3)}
+.bar-wrap{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.bar{height:100%;border-radius:3px;transition:width .6s ease}
+.bar-high{background:var(--teal)}
+.bar-med{background:var(--amber)}
+.bar-low{background:var(--text3)}
+.topic-count{font-size:12px;color:var(--text3);min-width:48px;text-align:right}
+
+/* PREDICTIONS */
+.pred-list{display:flex;flex-direction:column;gap:6px}
+.pred-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg3);border-radius:var(--radius-sm);border:0.5px solid var(--border)}
+.pred-topic{font-size:13px}
+.pred-score-high{font-size:13px;font-weight:600;color:var(--teal)}
+.pred-score-med{font-size:13px;font-weight:600;color:var(--amber)}
+.pred-score-low{font-size:13px;font-weight:600;color:var(--text3)}
+
+/* QUESTIONS */
+.q-list{display:flex;flex-direction:column;gap:8px}
+.q-card{background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px}
+.q-meta{font-size:11px;color:var(--text3);margin-bottom:5px;display:flex;gap:8px}
+.q-text{font-size:14px;line-height:1.6}
+
+/* PAPER */
+.paper-wrap{max-width:760px;margin:0 auto;padding:0 1.5rem 2rem}
+.paper-header{background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem}
+.paper-title{font-size:20px;font-weight:600;margin-bottom:4px}
+.paper-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text3);margin-bottom:12px}
+.paper-instr{font-size:13px;color:var(--text2);border-top:0.5px solid var(--border);padding-top:12px;line-height:1.6}
+.sec-hdr{display:flex;align-items:center;gap:10px;margin:1.5rem 0 1rem}
+.sec-badge{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;padding:3px 10px;border-radius:20px}
+.sec-a{background:rgba(29,158,117,.15);color:var(--teal)}
+.sec-b{background:rgba(127,119,221,.15);color:var(--purple)}
+.sec-c{background:rgba(239,159,39,.15);color:var(--amber)}
+.sec-name{font-size:15px;font-weight:500}
+.sec-marks{margin-left:auto;font-size:13px;color:var(--text3)}
+.question{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
+.q-top{display:flex;gap:12px;align-items:flex-start}
+.q-num{font-size:13px;font-weight:500;min-width:22px;color:var(--text3);padding-top:2px}
+.q-body{flex:1}
+.q-txt{font-size:14px;line-height:1.6}
+.q-topic-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:var(--bg3);color:var(--text3);margin-left:8px}
+.q-marks{font-size:12px;color:var(--text3);margin-top:5px}
+.opts{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.opt{font-size:13px;padding:8px 12px;border-radius:var(--radius-sm);border:0.5px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;transition:all .15s;text-align:left;font-family:var(--font)}
+.opt:hover{border-color:var(--teal);background:rgba(29,158,117,.08)}
+.opt.correct{background:rgba(29,158,117,.15);border-color:var(--teal);color:#5DCAA5}
+.opt.wrong{background:rgba(216,90,48,.1);border-color:var(--coral);color:#F0997B}
+.ans-box{margin-top:10px;height:56px;border-radius:var(--radius-sm);border:0.5px dashed var(--border2);background:var(--bg3);display:flex;align-items:center;justify-content:center}
+.ans-box span{font-size:12px;color:var(--text3)}
+.ans-box.tall{height:90px}
+.ans-box.xtall{height:120px}
+.ms-row{display:none;margin-top:10px;padding:10px 12px;border-radius:var(--radius-sm);background:rgba(29,158,117,.1);border:0.5px solid rgba(29,158,117,.3)}
+.ms-row.show{display:block}
+.ms-label{font-size:11px;font-weight:500;color:var(--teal);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.ms-text{font-size:13px;color:#5DCAA5;line-height:1.6}
+.divider{border:none;border-top:0.5px solid var(--border);margin:1.5rem 0}
+.score-bar{display:none;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:1.25rem;align-items:center;gap:16px;flex-wrap:wrap}
+.score-bar.show{display:flex}
+.score-val{font-size:22px;font-weight:600;color:var(--teal)}
+.score-label{font-size:13px;color:var(--text3)}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.ctrl-btn{font-size:13px;padding:7px 14px;background:var(--bg3);border:0.5px solid var(--border2);color:var(--text2);border-radius:var(--radius-sm);cursor:pointer;font-family:var(--font);transition:all .15s}
+.ctrl-btn:hover{border-color:var(--teal);color:var(--teal)}
+.hidden{display:none}
+.results-wrap{max-width:760px;margin:0 auto;padding:0 1.5rem}
+
+/* FOOTER */
+footer{text-align:center;padding:2rem;font-size:12px;color:var(--text3);border-top:0.5px solid var(--border);margin-top:3rem}
+footer span{color:var(--teal)}
+
+/* WORD BANK */
+.word-bank{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.word{font-size:12px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text2)}
+
+@media(max-width:520px){
+  .opts{grid-template-columns:1fr}
+  .hero{padding:2rem 1rem 1.5rem}
+  .filter-wrap,.paper-wrap,.results-wrap{padding:0 1rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">AP<span>EX</span></div>
+  <span class="nav-badge">Kenya CBC · Demo</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Kenya CBC · Grades 1–12 · Exam intelligence</div>
+  <div class="hero-title">Revise smarter.<br><span>Not harder.</span></div>
+  <div class="hero-sub">APEX analyses years of national exam data and generates personalised revision papers — with marking schemes — in seconds.</div>
+</div>
+
+<div class="filter-wrap">
+  <div class="filter-card">
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label>Stage</label>
+        <select id="stage" onchange="updateGrades()">
+          <option value="primary">Primary (Gr 1–6)</option>
+          <option value="junior">Junior Secondary (Gr 7–9)</option>
+          <option value="senior">Senior Secondary (Gr 10–12)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Grade</label>
+        <select id="grade"></select>
+      </div>
+      <div class="filter-group">
+        <label>Subject</label>
+        <select id="subject">
+          <option>Mathematics</option>
+          <option>English</option>
+          <option>Kiswahili</option>
+          <option>Science &amp; Technology</option>
+          <option>Social Studies</option>
+        </select>
+      </div>
+    </div>
+    <div class="year-row">
+      <label>Year range</label>
+      <input type="range" id="yearRange" min="1" max="10" step="1" value="5"
+        oninput="document.getElementById('yearLabel').textContent='Last '+this.value+' years ('+(2026-this.value)+'–2025)'"/>
+      <span id="yearLabel">Last 5 years (2021–2025)</span>
+    </div>
+    <button class="run-btn" onclick="runAnalysis()">Analyse exam papers →</button>
+  </div>
+</div>
+
+<div class="results-wrap hidden" id="resultsSection">
+  <div class="metrics" id="metricsRow"></div>
+  <div class="tab-row">
+    <button class="tab active" onclick="switchTab('frequency',this)">Topic frequency</button>
+    <button class="tab" onclick="switchTab('prediction',this)">Predictions</button>
+    <button class="tab" onclick="switchTab('questions',this)">Sample questions</button>
+  </div>
+  <div id="tab-frequency">
+    <div class="topic-list" id="topicList"></div>
+  </div>
+  <div id="tab-prediction" class="hidden">
+    <div class="pred-list" id="predList"></div>
+  </div>
+  <div id="tab-questions" class="hidden">
+    <div class="q-list" id="questionList"></div>
+  </div>
+  <div class="divider"></div>
+  <button class="run-btn" style="max-width:760px" onclick="generatePaper()">Generate full revision paper with marking scheme →</button>
+</div>
+
+<div class="paper-wrap hidden" id="paperSection">
+  <div class="divider"></div>
+  <div class="paper-header" id="paperHeader"></div>
+  <div class="ctrls">
+    <button class="ctrl-btn" onclick="toggleMS()">Show / hide marking scheme</button>
+    <button class="ctrl-btn" onclick="resetPaper()">Reset paper</button>
+  </div>
+  <div class="score-bar" id="scoreBar">
+    <div><div class="score-label">Section A score</div><div class="score-val" id="scoreVal">—</div></div>
+    <div style="font-size:13px;color:var(--text3)">Multiple choice only. Sections B & C are self-marked.</div>
+  </div>
+  <div id="paperBody"></div>
+</div>
+
+<footer>APEX &copy; 2026 · Built in Nairobi, Kenya · <span>Kenya CBC</span> · Demo version</footer>
+
+<script>
+const gradeMap={primary:['Grade 1','Grade 2','Grade 3','Grade 4','Grade 5','Grade 6'],junior:['Grade 7','Grade 8','Grade 9'],senior:['Grade 10','Grade 11','Grade 12']};
+
+const topicData={
+  Mathematics:{
+    primary:[{name:'Fractions',pct:100,tier:'high'},{name:'Geometry',pct:100,tier:'high'},{name:'Measurement',pct:90,tier:'high'},{name:'Ratio & proportion',pct:80,tier:'high'},{name:'Percentages',pct:80,tier:'high'},{name:'Decimals',pct:70,tier:'med'},{name:'Data handling',pct:60,tier:'med'},{name:'Whole numbers',pct:50,tier:'low'}],
+    junior:[{name:'Algebra',pct:100,tier:'high'},{name:'Linear equations',pct:90,tier:'high'},{name:'Geometry & angles',pct:90,tier:'high'},{name:'Statistics',pct:80,tier:'high'},{name:'Indices & surds',pct:70,tier:'med'},{name:'Trigonometry',pct:60,tier:'med'},{name:'Financial math',pct:40,tier:'low'}],
+    senior:[{name:'Calculus',pct:100,tier:'high'},{name:'Vectors',pct:90,tier:'high'},{name:'Matrices',pct:80,tier:'high'},{name:'Complex numbers',pct:70,tier:'med'},{name:'Probability',pct:70,tier:'med'},{name:'Sequences & series',pct:60,tier:'med'},{name:'Logarithms',pct:40,tier:'low'}]
+  },
+  English:{
+    primary:[{name:'Reading comprehension',pct:100,tier:'high'},{name:'Grammar & usage',pct:90,tier:'high'},{name:'Composition writing',pct:90,tier:'high'},{name:'Vocabulary',pct:70,tier:'med'},{name:'Letter writing',pct:60,tier:'med'},{name:'Oral skills',pct:50,tier:'low'}],
+    junior:[{name:'Comprehension',pct:100,tier:'high'},{name:'Essay writing',pct:90,tier:'high'},{name:'Language use',pct:80,tier:'high'},{name:'Summary writing',pct:70,tier:'med'},{name:'Formal letter',pct:60,tier:'med'}],
+    senior:[{name:'Literature analysis',pct:100,tier:'high'},{name:'Essay composition',pct:90,tier:'high'},{name:'Language structures',pct:80,tier:'high'},{name:'Oral communication',pct:60,tier:'med'}]
+  },
+  Kiswahili:{
+    primary:[{name:'Ufahamu',pct:100,tier:'high'},{name:'Sarufi',pct:90,tier:'high'},{name:'Insha',pct:85,tier:'high'},{name:'Msamiati',pct:70,tier:'med'},{name:'Barua',pct:55,tier:'med'}],
+    junior:[{name:'Ufahamu',pct:100,tier:'high'},{name:'Insha',pct:90,tier:'high'},{name:'Sarufi na matumizi',pct:85,tier:'high'},{name:'Muhtasari',pct:65,tier:'med'}],
+    senior:[{name:'Fasihi',pct:100,tier:'high'},{name:'Insha',pct:90,tier:'high'},{name:'Sarufi',pct:80,tier:'high'},{name:'Ufahamu',pct:70,tier:'med'}]
+  },
+  'Science & Technology':{
+    primary:[{name:'Living things',pct:100,tier:'high'},{name:'Matter & materials',pct:90,tier:'high'},{name:'Energy',pct:85,tier:'high'},{name:'Environment',pct:70,tier:'med'},{name:'Technology',pct:55,tier:'med'}],
+    junior:[{name:'Biology basics',pct:100,tier:'high'},{name:'Chemistry basics',pct:90,tier:'high'},{name:'Physics basics',pct:85,tier:'high'},{name:'Scientific inquiry',pct:60,tier:'med'}],
+    senior:[{name:'Cell biology',pct:100,tier:'high'},{name:'Organic chemistry',pct:90,tier:'high'},{name:'Mechanics',pct:85,tier:'high'},{name:'Ecology',pct:65,tier:'med'}]
+  },
+  'Social Studies':{
+    primary:[{name:'Our environment',pct:100,tier:'high'},{name:'Kenyan history',pct:85,tier:'high'},{name:'Citizenship',pct:80,tier:'high'},{name:'Map work',pct:70,tier:'med'},{name:'World geography',pct:55,tier:'med'}],
+    junior:[{name:'Kenyan geography',pct:100,tier:'high'},{name:'History & government',pct:90,tier:'high'},{name:'Social issues',pct:75,tier:'med'},{name:'Economics basics',pct:60,tier:'med'}],
+    senior:[{name:'Government & politics',pct:100,tier:'high'},{name:'Economic development',pct:90,tier:'high'},{name:'African history',pct:80,tier:'high'},{name:'Global issues',pct:65,tier:'med'}]
+  }
+};
+
+const sampleQs={
+  Mathematics_primary:[
+    {year:'2024',topic:'Fractions',text:'A farmer had 480 mangoes. He sold 3/8 on Saturday and 1/4 of the remainder on Sunday. How many were left?'},
+    {year:'2023',topic:'Geometry',text:'A rectangle is 15 cm long and 9 cm wide. Find its (a) area and (b) perimeter.'},
+    {year:'2022',topic:'Percentages',text:'A shopkeeper bought a bag for Ksh 500 and sold it for Ksh 650. What was the percentage profit?'},
+    {year:'2021',topic:'Ratio',text:'Divide Ksh 7,200 in the ratio 2:3:4. How much is the largest share?'}
+  ],
+  Mathematics_junior:[
+    {year:'2024',topic:'Algebra',text:'Solve for x: 3(2x − 4) + 5 = 2(x + 7)'},
+    {year:'2023',topic:'Statistics',text:'The mean of five numbers is 12. Four of the numbers are 8, 14, 10, and 16. Find the fifth number.'},
+    {year:'2022',topic:'Geometry & angles',text:'In triangle ABC, angle A = 65° and angle B = 48°. Calculate angle C.'},
+    {year:'2021',topic:'Linear equations',text:'A matatu charges Ksh 80 per km for the first 5 km and Ksh 50 per km thereafter. Write an expression for d km (d > 5).'}
+  ],
+  Mathematics_senior:[
+    {year:'2024',topic:'Calculus',text:'Differentiate y = 3x⁴ − 5x² + 7x − 2 with respect to x.'},
+    {year:'2023',topic:'Vectors',text:'Given vectors a = (3, −1, 2) and b = (−2, 4, 1), find |a + b|.'},
+    {year:'2022',topic:'Matrices',text:'Find the inverse of A = [[2,3],[1,4]] and solve: 2x + 3y = 7, x + 4y = 6.'},
+    {year:'2021',topic:'Probability',text:'A bag has 4 red, 3 blue, 5 green balls. Two drawn without replacement. P(same colour)?'}
+  ],
+  English_primary:[
+    {year:'2024',topic:'Comprehension',text:'Read the passage and answer: What is the main idea of paragraph 2? Use evidence from the text.'},
+    {year:'2023',topic:'Grammar & usage',text:'Choose the correct form: "The children _____ playing when it started to rain." (is / were / are)'},
+    {year:'2022',topic:'Composition writing',text:'Write a composition: "The day I helped someone in need." (150–200 words)'},
+    {year:'2021',topic:'Vocabulary',text:'What does the word "matriarch" mean as used in the passage? Choose the best answer.'}
+  ],
+  English_junior:[
+    {year:'2024',topic:'Comprehension',text:'In your own words, explain TWO challenges described in paragraph 3.'},
+    {year:'2023',topic:'Essay writing',text:'Write a formal letter to your County Director of Education suggesting improvements to your school.'},
+    {year:'2022',topic:'Summary writing',text:'Write a summary of the passage in 60–80 words using continuous prose.'},
+    {year:'2021',topic:'Language use',text:'Rewrite correcting all errors: "She don\'t know the answer. There is many schools here."'}
+  ],
+  Kiswahili_primary:[
+    {year:'2024',topic:'Ufahamu',text:'Soma kifungu na ujibu: Eleza kwa maneno yako mwenyewe tatizo kuu linaloelezwa katika aya ya kwanza.'},
+    {year:'2023',topic:'Sarufi',text:'Andika sentensi ifuatayo katika wakati uliopita: "Watoto wanacheza uwanjani sasa hivi."'},
+    {year:'2022',topic:'Insha',text:'Andika insha kuhusu: "Siku nilipomhudumia mtu aliyehitaji msaada." (maneno 150–200)'},
+    {year:'2021',topic:'Msamiati',text:'Neno "shujaa" linamaanisha nini kama lilivyotumika katika kifungu? Chagua jibu sahihi.'}
+  ]
+};
+
+const paperData={
+  Mathematics_primary:{
+    title:'Grade {grade} Mathematics',
+    time:'1 hr 30 min',marks:'50',
+    secA:{name:'Multiple choice',marks:'20 marks (2 marks each)',qs:[
+      {id:'q1',text:'What is 3/4 + 1/8?',topic:'Fractions',opts:['A. 4/12','B. 7/8','C. 4/8','D. 1/2'],ans:'B',ms:'B. 7/8 — Convert 3/4 to 6/8, then add 1/8 = 7/8.'},
+      {id:'q2',text:'A rectangle is 12 cm × 7 cm. What is its perimeter?',topic:'Measurement',opts:['A. 84 cm','B. 19 cm','C. 38 cm','D. 76 cm'],ans:'C',ms:'C. 38 cm — P = 2(12+7) = 2×19 = 38 cm.'},
+      {id:'q3',text:'Express 45% as a fraction in lowest terms.',topic:'Percentages',opts:['A. 45/100','B. 9/20','C. 4/5','D. 9/10'],ans:'B',ms:'B. 9/20 — 45÷100, HCF 5 → 9/20.'},
+      {id:'q4',text:'Divide 360 in the ratio 2:3. What is the larger share?',topic:'Ratio',opts:['A. 144','B. 180','C. 216','D. 120'],ans:'C',ms:'C. 216 — Parts=5. One part=72. Larger=3×72=216.'},
+      {id:'q5',text:'What is the area of a triangle with base 10 cm, height 6 cm?',topic:'Geometry',opts:['A. 60 cm²','B. 30 cm²','C. 16 cm²','D. 32 cm²'],ans:'B',ms:'B. 30 cm² — A = ½×10×6 = 30 cm².'}
+    ]},
+    secB:{name:'Short answer — show all working',marks:'20 marks (4 marks each)',qs:[
+      {id:'sb1',text:'A farmer had 480 mangoes. He sold 3/8 on Saturday and 1/4 of the remainder on Sunday. How many were left?',topic:'Fractions',marks:'4 marks',ms:'Sat: 3/8×480=180. (1m) Remainder: 480−180=300. (1m) Sun: 1/4×300=75. (1m) Left: 300−75=225 mangoes. (1m)'},
+      {id:'sb2',text:'Akinyi, Baraka and Ciro share Ksh 7,200 in ratio 2:3:4. How much does each receive?',topic:'Ratio',marks:'4 marks',ms:'Parts=9. (1m) One part=Ksh800. (1m) Akinyi=1,600. Baraka=2,400. (1m) Ciro=3,200. (1m)'},
+      {id:'sb3',text:'A school bought 6 desks at Ksh 1,850 each and 4 chairs at Ksh 750 each. Given a 10% discount on total. How much paid?',topic:'Percentages',marks:'4 marks',ms:'Desks=11,100. Chairs=3,000. (1m) Total=14,100. (1m) Discount=1,410. (1m) Paid=Ksh12,690. (1m)'},
+      {id:'sb4',text:'Books read: Amina 8, Brian 5, Ciru 10, David 7, Esther 5. Find (a) mean, (b) median, (c) mode.',topic:'Data handling',marks:'4 marks',ms:'(a) Mean=(8+5+10+7+5)÷5=7. (1m) (b) Ordered:5,5,7,8,10. Median=7. (1m) (c) Mode=5. (1m) Working shown. (1m)'}
+    ]},
+    secC:{name:'Problem solving',marks:'10 marks',qs:[
+      {id:'sc1',text:'Wanjiku needs Ksh 9,600 for a bicycle. She saved Ksh 3,200. Her aunt gives her 1/4 of the remaining amount. She earns the rest selling juice at Ksh 15 profit per cup, selling 20 cups per day.\n\n(a) How much does Wanjiku still need after her aunt\'s contribution?\n(b) How many cups must she sell?\n(c) How many school days will it take?',topic:'Fractions · Percentages · Ratio',marks:'10 marks',ms:'Remaining=9,600−3,200=6,400. (1m) Aunt=1/4×6,400=1,600. (2m) (a) Still needed=4,800. (2m) (b) Cups=4,800÷15=320. (2m) (c) Days=320÷20=16 school days. (2m) Working=1m.'}
+    ]}
+  },
+  English_primary:{
+    title:'Grade {grade} English',
+    time:'2 hours',marks:'60',
+    passage:`Kenya is home to many wonderful wild animals. Among the most famous is the African elephant — the largest land animal on earth. Elephants live in family groups led by the oldest female, called the matriarch. She guides the herd to water and food, especially during dry seasons.\n\nElephants communicate in many ways. They use sounds, touch, and vibrations in the ground that travel through their feet. Scientists have discovered that elephants can hear these low sounds from many kilometres away, helping separated families find each other.\n\nUnfortunately, elephants are threatened by poaching and loss of habitat. Poachers kill elephants illegally for their ivory tusks. Conservation organisations and the Kenyan government have worked hard to protect elephants, and Kenya's elephant population has grown because of these efforts.\n\nYou can help too. By learning about elephants and sharing what you know, you become a conservation ambassador. Refusing to buy ivory products makes a real difference to the survival of these magnificent animals.`,
+    secA:{name:'Reading comprehension',marks:'20 marks',qs:[
+      {id:'q1',text:'What is the role of the matriarch in an elephant herd?',topic:'Comprehension',opts:['A. She produces the most young','B. She guards the herd from predators','C. She guides the herd to water and food','D. She communicates using vibrations'],ans:'C',ms:'C — The passage states the matriarch "guides the herd to water and food." (2 marks)'},
+      {id:'q2',text:'What does the word "matriarch" mean as used in the passage?',topic:'Vocabulary',opts:['A. The strongest male elephant','B. The oldest female leader','C. A young elephant calf','D. A female that cannot hear'],ans:'B',ms:'B — Defined in the text as "the oldest female." (2 marks)'},
+      {id:'q3',text:'How do elephants use vibrations?',topic:'Comprehension',opts:['A. To warn poachers','B. To find underground water','C. To help separated families reunite','D. To communicate with scientists'],ans:'C',ms:'C — "Helps families that have been separated to find each other again." (2 marks)'},
+      {id:'q4',text:'What does "poaching" mean as used in paragraph 3?',topic:'Vocabulary',opts:['A. Cooking elephants','B. Illegally killing wild animals','C. Protecting animals from disease','D. Moving elephants to safer areas'],ans:'B',ms:'B — Context: "Poachers kill elephants illegally." (2 marks)'},
+      {id:'q5',text:'Which is the best title for this passage?',topic:'Comprehension',opts:['A. The dangers of ivory trade','B. African elephants: communication and conservation','C. How elephants find water','D. Scientists who study elephants'],ans:'B',ms:'B — Covers both communication (¶2) and conservation (¶3–4). (2 marks)'}
+    ]},
+    secB:{name:'Grammar and language use',marks:'20 marks',qs:[
+      {id:'q6',text:'"The children _____ playing in the field when it started to rain." Choose the correct verb.',topic:'Tenses',opts:['A. is','B. were','C. are','D. was'],ans:'B',ms:'B. were — Past continuous, plural subject "children." (2 marks)'},
+      {id:'q7',text:'Which sentence uses punctuation correctly?',topic:'Punctuation',opts:['A. "come here," said the teacher.','B. "Come here," said the teacher.','C. "Come here" said the teacher.','D. "come here" said the teacher.'],ans:'B',ms:'B — Capital after opening quote; comma before closing quote. (2 marks)'},
+      {id:'q8',text:'What is the correct plural of "ox"?',topic:'Grammar',opts:['A. Oxes','B. Ox\'s','C. Oxen','D. Oxs'],ans:'C',ms:'C. Oxen — Irregular plural. (2 marks)'},
+      {id:'q9',text:'Which word is an antonym of "ancient"?',topic:'Vocabulary',opts:['A. Old','B. Modern','C. Historical','D. Aged'],ans:'B',ms:'B. Modern — Opposite meaning to ancient. (2 marks)'},
+      {id:'q10',text:'"The book is _____ the shelf." Choose the correct preposition.',topic:'Grammar',opts:['A. in','B. at','C. on','D. by'],ans:'C',ms:'C. on — Items rest "on" a shelf. (2 marks)'}
+    ]},
+    secC:{name:'Writing skills',marks:'20 marks',qs:[
+      {id:'sc1',text:'Read the passage again. Write a summary of the main challenges facing elephants in Kenya and the efforts being made to address them. Write in continuous prose, 60–80 words.',topic:'Summary writing',marks:'10 marks',ms:'Content (6m): poaching for ivory (2m); loss of habitat (2m); government/conservation response and population growth (2m). Language (2m): grammar, spelling, punctuation. Organisation (2m): logical flow, correct word range. Deduct 1m if outside range.'},
+      {id:'sc2',text:'Write a formal letter to the County Director of Education in your county. Suggest TWO ways your school can be improved. Write 100–120 words using all correct parts of a formal letter.',topic:'Formal letter',marks:'10 marks',ms:'Format (4m): sender address (1m), date (1m), recipient address (1m), subject line (1m). Content (4m): two clear suggestions with explanation (2m each). Language (2m): formal register, correct grammar. Outside word range: deduct 1m.'}
+    ]}
+  }
+};
+
+const correct={};
+const picked={};
+let msVisible=false;
+
+function updateGrades(){
+  const stage=document.getElementById('stage').value;
+  const sel=document.getElementById('grade');
+  sel.innerHTML='';
+  gradeMap[stage].forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;sel.appendChild(o)});
+  sel.value=gradeMap[stage][gradeMap[stage].length-1];
+}
+
+function getTopics(){
+  const subj=document.getElementById('subject').value;
+  const stage=document.getElementById('stage').value;
+  return (topicData[subj]&&topicData[subj][stage])||topicData.Mathematics.primary;
+}
+
+function runAnalysis(){
+  const years=parseInt(document.getElementById('yearRange').value);
+  const topics=getTopics();
+  const rs=document.getElementById('resultsSection');
+  rs.classList.remove('hidden');
+  document.getElementById('metricsRow').innerHTML=`
+    <div class="metric"><div class="metric-label">Papers analysed</div><div class="metric-val">${years*2}</div></div>
+    <div class="metric"><div class="metric-label">Topics found</div><div class="metric-val">${topics.length}</div></div>
+    <div class="metric"><div class="metric-label">High priority</div><div class="metric-val">${topics.filter(t=>t.tier==='high').length}</div></div>
+    <div class="metric"><div class="metric-label">Years covered</div><div class="metric-val">${years}</div></div>`;
+  document.getElementById('topicList').innerHTML=topics.map(t=>`
+    <div class="topic-row">
+      <span class="topic-name">${t.name}<span class="badge badge-${t.tier}">${t.tier}</span></span>
+      <div class="bar-wrap"><div class="bar bar-${t.tier}" style="width:${t.pct}%"></div></div>
+      <span class="topic-count">${Math.round(t.pct/100*years)}/${years} yrs</span>
+    </div>`).join('');
+  document.getElementById('predList').innerHTML=topics.slice(0,6).map(t=>{
+    const s=Math.min(98,Math.round(t.pct*.9+Math.random()*8));
+    const cls=s>75?'high':s>50?'med':'low';
+    return`<div class="pred-item"><span class="pred-topic">${t.name}</span><span class="pred-score-${cls}">${s}% likely</span></div>`;
+  }).join('');
+  const stage=document.getElementById('stage').value;
+  const subj=document.getElementById('subject').value;
+  const key=subj+'_'+stage;
+  const qs=sampleQs[key]||sampleQs.Mathematics_primary;
+  const grade=document.getElementById('grade').value;
+  document.getElementById('questionList').innerHTML=qs.map(q=>`
+    <div class="q-card">
+      <div class="q-meta"><span>${q.year}</span><span>·</span><span>${q.topic}</span><span>·</span><span>${grade}</span></div>
+      <div class="q-text">${q.text}</div>
+    </div>`).join('');
+  switchTab('frequency',document.querySelector('.tab.active'));
+  rs.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function switchTab(name,btn){
+  ['frequency','prediction','questions'].forEach(t=>document.getElementById('tab-'+t).classList.add('hidden'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.remove('hidden');
+  btn.classList.add('active');
+}
+
+function generatePaper(){
+  const subj=document.getElementById('subject').value;
+  const stage=document.getElementById('stage').value;
+  const grade=document.getElementById('grade').value;
+  const key=subj+'_'+stage;
+  const data=paperData[key]||paperData.Mathematics_primary;
+  Object.keys(correct).forEach(k=>delete correct[k]);
+  Object.keys(picked).forEach(k=>delete picked[k]);
+  msVisible=false;
+  document.getElementById('scoreBar').classList.remove('show');
+
+  document.getElementById('paperHeader').innerHTML=`
+    <div class="paper-title">${data.title.replace('{grade}',grade)} — Revision paper</div>
+    <div class="paper-meta">
+      <span>Based on 2021–2025 national exams</span>
+      <span>${data.time}</span>
+      <span>${data.marks} marks</span>
+      <span>Kenya CBC</span>
+    </div>
+    <div class="paper-instr">Answer <strong>all</strong> questions in all sections. Show all working in sections B and C. Marks are awarded for correct working even where the final answer is wrong.</div>`;
+
+  let html='';
+
+  // Passage if exists
+  if(data.passage){
+    html+=`<div style="background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:1rem;font-size:14px;line-height:1.8;white-space:pre-line">${data.passage}</div>`;
+  }
+
+  // Section A
+  html+=`<div class="sec-hdr"><span class="sec-badge sec-a">Section A</span><span class="sec-name">${data.secA.name}</span><span class="sec-marks">${data.secA.marks}</span></div>`;
+  data.secA.qs.forEach((q,i)=>{
+    correct[q.id]=q.ans;
+    html+=`<div class="question" id="${q.id}">
+      <div class="q-top"><span class="q-num">${i+1}.</span>
+      <div class="q-body">
+        <div class="q-txt">${q.text}<span class="q-topic-tag">${q.topic}</span></div>
+        <div class="opts">${q.opts.map(o=>`<button class="opt" onclick="selOpt(this,'${q.id}','${o[0]}')">${o}</button>`).join('')}</div>
+        <div class="ms-row" id="ms-${q.id}"><div class="ms-label">Answer</div><div class="ms-text">${q.ms}</div></div>
+      </div></div></div>`;
+  });
+
+  // Section B
+  html+=`<div class="divider"></div><div class="sec-hdr"><span class="sec-badge sec-b">Section B</span><span class="sec-name">${data.secB.name}</span><span class="sec-marks">${data.secB.marks}</span></div>`;
+  data.secB.qs.forEach((q,i)=>{
+    html+=`<div class="question">
+      <div class="q-top"><span class="q-num">${data.secA.qs.length+i+1}.</span>
+      <div class="q-body">
+        <div class="q-txt" style="white-space:pre-line">${q.text}<span class="q-topic-tag">${q.topic}</span></div>
+        <div class="q-marks">${q.marks}</div>
+        <div class="ans-box tall"><span>Working space</span></div>
+        <div class="ms-row" id="ms-${q.id}"><div class="ms-label">Marking scheme</div><div class="ms-text">${q.ms}</div></div>
+      </div></div></div>`;
+  });
+
+  // Section C
+  html+=`<div class="divider"></div><div class="sec-hdr"><span class="sec-badge sec-c">Section C</span><span class="sec-name">${data.secC.name}</span><span class="sec-marks">${data.secC.marks}</span></div>`;
+  data.secC.qs.forEach((q,i)=>{
+    html+=`<div class="question">
+      <div class="q-top"><span class="q-num">${data.secA.qs.length+data.secB.qs.length+i+1}.</span>
+      <div class="q-body">
+        <div class="q-txt" style="white-space:pre-line">${q.text}<span class="q-topic-tag">${q.topic}</span></div>
+        <div class="q-marks">${q.marks}</div>
+        <div class="ans-box xtall"><span>Working space</span></div>
+        <div class="ms-row" id="ms-${q.id}"><div class="ms-label">Marking scheme</div><div class="ms-text">${q.ms}</div></div>
+      </div></div></div>`;
+  });
+
+  const ps=document.getElementById('paperSection');
+  document.getElementById('paperBody').innerHTML=html;
+  ps.classList.remove('hidden');
+  ps.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function selOpt(el,qid,letter){
+  const all=el.parentElement.querySelectorAll('.opt');
+  all.forEach(o=>{o.classList.remove('correct','wrong')});
+  el.classList.add(correct[qid]===letter?'correct':'wrong');
+  if(correct[qid]!==letter) all.forEach(o=>{if(o.textContent.trim().startsWith(correct[qid]))o.classList.add('correct')});
+  picked[qid]=letter;
+  const total=Object.keys(correct).length;
+  const done=Object.keys(picked).length;
+  const score=Object.keys(picked).filter(k=>picked[k]===correct[k]).length;
+  const bar=document.getElementById('scoreBar');
+  bar.classList.add('show');
+  document.getElementById('scoreVal').textContent=(score*2)+' / '+(total*2)+' marks ('+done+'/'+total+' answered)';
+}
+
+function toggleMS(){
+  msVisible=!msVisible;
+  document.querySelectorAll('.ms-row').forEach(el=>el.classList.toggle('show',msVisible));
+}
+
+function resetPaper(){
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));
+  document.querySelectorAll('.ms-row').forEach(o=>o.classList.remove('show'));
+  Object.keys(picked).forEach(k=>delete picked[k]);
+  msVisible=false;
+  document.getElementById('scoreBar').classList.remove('show');
+}
+
+updateGrades();
+</script>
+</body>
+</html>
